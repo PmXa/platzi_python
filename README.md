@@ -7,7 +7,7 @@ Profesor: Facundo García Martoni
 
 [TOC]
 
-## 🙏 El Zen de Python
+## El Zen de Python 🙏
 
 Importando el módulo `this`, se puede mostrar el zen (los principios más importantes de python). Se creó en 1999 por Tim Peters. El zen es:
 
@@ -31,7 +31,7 @@ Importando el módulo `this`, se puede mostrar el zen (los principios más impor
 18. If the implementation is easy to explain, it may be a good idea.
 19. Namespaces are one honking great idea -- let's do more of those!
 
-## 💻 Entornos virtuales
+## Entornos virtuales 💻
 
 Es como *clonar* la instalación de python para cada proyecto que tengamos. De esta manera, podemos instalar, actualizar o remover versiones de python y de sus módulos sin afectar la dependencia de otros proyectos.
 
@@ -51,11 +51,11 @@ Por supuesto, se puede definir un *alias* para no tener que escribir todo el com
 
 > 💡 El ambiente virtual sólo funciona en nuestra computadora, por lo que debería ignorarse si se sube el proyecto a GitHub con un `.gitignore`.
 
-### PIP
+### PIP 🐍
 
 Con pip podemos instalar módulos de forma global o individualmente para cada ambiente virtual. También podemos exportar a un archivo los módulos instalados para que otra persona sepa y después pueda instalar los módulos necesarios para el proyecto ¡incluso si esta al otro lado del mundo!
 
-``` python
+```python
 # Listemos los paquetes que tenemos instalados y exportémoslos a un archivo
 pip freeze > requirements.txt
 
@@ -63,11 +63,11 @@ pip freeze > requirements.txt
 pip install -r requirements.txt
 ```
 
-## 📖 Comprehension lists & dicts
+## Comprehension lists & dicts 📖
 
 Primero debemos recordar que , como las listas, tuplas y diccionarios son todos objetos de Python, pueden anidarse y usarse unos dentro de otros:
 
-``` python
+```python
 # Diccionarios en listas
 pepes_nerd = [
     {"number": "1", "name":"Guty"},
@@ -96,7 +96,7 @@ Las *comprehension lists* son estructuras que se usan para crear nuevas listas y
 
 Por ejemplo, si queremos obtener el cuadrado de los números del 1 al 100 que **NO** sean divisibles entre 3 podemos resolver el problema de dos formas:
 
-``` python
+```python
 # Método 1: clásico
 squares =[]
 for i in range(1, 101):
@@ -109,7 +109,7 @@ squares = [i**2 for i in range(1, 101) if (i%3 != 0)]
 
 Y podemos hacer ejemplos más complejos, como crear una lista de todos los múltiplos de 4, 6 y 9 menores a 5 dígitos:
 
-``` python
+```python
 overly_complicated_list = [i for i in range(1, 99999) if (i%4 == 0 and i%6 == 0 and i%9 == 0)]
 ```
 
@@ -118,6 +118,89 @@ Un concepto similar se aplica a los diccionarios, con la sintaxis `{key: value f
 - sus llaves sean no divisibles entre 3 de entre los primeros 100 números naturales y
 - sus valores sean el valor de la llave al cubo
 
-``` python
+```python
 comp_dict = {i: i**3 for i in range(1, 101) if i%3 != 0}
 ```
+
+## Funciones ⚙
+
+### Funciones anónimas
+
+También se conocen como funciones lambda y son funciones de una sóla linea con la sintaxis `<identificador> = lambda <argumentos>: <expresión>`. El objeto función se almacena en el identificador y así es como podemos invocarla:
+
+```python
+# Para checar si una palabra es un palíndromo
+p_check = lambda word: word == word[::-2]
+
+p_check("ana") # True
+```
+
+Un ejemplo peculiar de las funciones anónimas es al hacer la *fusión* de diccionarios. Para cada *entrada de diccionario* `worker`, añade una *llave* llamada `old` cuyo *valor* sea la evaluación (`True` o `False`) de si su edad es mayor a 70 años:
+
+``` python
+lambda worker: worker | {"old": worker["age"] >= 70}
+```
+
+> 💡 El operador "`|`" es el *pipe operator* y es nuevo de python 3.9. Es el equivalente a sumar listas, pero con diccionarios.
+
+Por supuesto, el código anterior es mucho más útil si lo aplicamos con (spoiler 👀) [la función map](#`map`).
+
+### Funciones de orden superior
+
+Una función es de orden superior cuyo argumento incluye otra función, por ejemplo:
+
+```python
+# Función de orden superior
+def run(func):
+    func()
+
+# Función común, genérica y corriente
+def holi():
+    print("Holi! 😃")
+    
+# Función común, genérica y corriente 2
+def bye():
+    print("Adiós 🙁")
+    
+run(holi)	# "Holi! 😃"
+run(bye)	# "Adiós 🙁"
+```
+
+Las tres funciones de orden superior más importantes son:
+
+#### `filter`
+
+Sirve para aplicar una función (primer argumento) como criterio a un iterable (segundo argumento) cualquier cosa que pueda recorrerse en Python). Por ejemplo, podemos *filtrar* los elementos impares:
+
+```python
+my_list = [1,2,4,5,6,8,9,11]
+odd_only = list(filter(lambda x: x%2 != 0, my_list))
+print(odd) # [1,5,9,11]
+```
+
+#### `map`
+
+Nos permite aplicar una función a cada elemento de un iterable con la misma sintaxis que con `filter`, usando una función en el primer argumento y el iterable en el segundo uwu. Por ejemplo, podemos elevar al cuadrado *cada* elemento de `my_list`:
+
+```python
+my_list = [1, 2, 3, 4, 5]
+squared = list(map(lambda x: x**2, my_list))
+print(squared) # [1, 4, 9, 16, 25]
+```
+
+#### `reduce`
+
+Esta función *colapsa* o *reduce* todos los elementos a un único resultado aplicando una función con **dos** argumentos: el primero de ellos actuará como el *resultado acumulado final* y, el segundo, será el siguiente elemento del iterable.
+
+> 💡 ¡La función `reduce` debe importarse del módulo `functools`!
+
+Por ejemplo, podemos *reducir* `[2, 2, 2, 2]` a 16 mediante:
+
+```python
+from functools import reduce
+my_list = [1, 2, 3, 4, 5, 6]
+product = reduce(lambda a,b: a*b, my_list)
+print(product) # 720
+```
+
+![filter, map and reduce functions](https://miro.medium.com/max/1200/1*DreeF8a4h2pvxRly39HjAA.jpeg)
