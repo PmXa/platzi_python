@@ -362,3 +362,29 @@ print(palindrome("")) # AssertionError: No se admiten cadenas vacías
 > In plain English, an assert statement says “*I assert that this condition holds true, and if not, there is a bug somewhere in the program*.” Unlike exceptions, your code should not handle assert statements with try and except; if an assert fails, your program should crash. By failing fast like this, you shorten the time between the original cause of the bug and when you first notice the bug. This will reduce the amount of code you will have to check before finding the code that’s causing the bug. Assertions are for programmer errors, not user errors. For errors that can be recovered from (such as a file not being found or the user enter-ing invalid data), raise an exception instead of detecting it with an assertstatement.
 >
 > "How to automate the boring stuff with Python" - Al Sweigart
+
+## Manejo de archivos 📄
+
+A grosso modo tenemos dos tipos de archivos:
+
+```mermaid
+flowchart TB
+Archivos --> A(Texto Plano \n .txt .csv. xml \n .md .py .json)
+Archivos --> B(Binarios \n .jpg .mp3 .mkv .dll)
+```
+
+Normalmente en python **no** nos metemos con archivos binarios, pero sí con los de texto plano. Hay 3 modos en los que se puede abrir un archivo:
+
+- R: lectura
+- W: escritura (sobrescribiendo)
+- A: escritura (de añadir, no sobrescribir)
+
+Para abrir un archivo en python (ya sea en modo `"r"`, `"w"` o `"a"`) y guardarlo en una variable `file_name`, usamos:
+
+```python
+with open("ruta", "r") as file_name:
+```
+
+La palabra clave `with` es un *manejador contextual*; lo que hace es que, si se cierra de forma inesperada nuestro programa, el archivo no se rompe.
+
+> 💡 Usar `encoding="utf-8"` como 3° argumento en `open` ayuda para tener mejor compatibilidad con caracteres extraños.
