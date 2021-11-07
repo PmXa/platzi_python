@@ -1,5 +1,5 @@
 ''' ----------------------------------------
-Hangman Game v0.1
+Hangman Game v0.3
 Platzi's Intermediate-Python Course Project
 By PmXa [11-2021]
 ---------------------------------------- '''
@@ -9,8 +9,9 @@ By PmXa [11-2021]
 # ----------------------
 
 from drawings import *
-import random
 from os import system
+import random
+import unidecode
 
 # ----------------------
 # Function definitions
@@ -24,11 +25,22 @@ def get_words():
     return words
 
 
+def process_word(word):
+    processed_word = {}
+    for index, element in enumerate(word):
+        if not (element in processed_word):
+            processed_word[element] = [index]
+        else:
+            processed_word[element].append(index)
+    return processed_word
+
+
 def print_info(life_count: int, user_guess: str):
+    print(banner)
+    print("Ingresa una letra: ")
     print(drawings[6 - life_count])
     print("💖"*life_count)
     print(" ".join(user_guess))
-    print("Ingresa una letra: ")
 
 # ----------------------
 # Main function & entry point 
@@ -36,14 +48,9 @@ def print_info(life_count: int, user_guess: str):
 
 def run():
     word_list = get_words()
-    word = random.choice(word_list)
-
-    answer = {}
-    for index, element in enumerate(word[:-1]):
-        if not (element in answer):
-            answer[element] = [index]
-        else:
-            answer[element].append(index)
+    original_word = random.choice(word_list)
+    word = unidecode.unidecode(original_word)
+    answer = process_word(word)
 
     guess = ["_" for i in range(len(word) - 1)]
     lives = 6
@@ -65,13 +72,15 @@ def run():
         
         if not ("_" in guess):
             _ = system("clear")
-            print("¡Ganaste!")
+            print(drawings[-1])
+            print(winning_message)
             break
         
     if lives == 0:
         _ = system("clear")
+        print(banner)
         print_info(lives, guess)
-        print("¡Perdiste! La respuesta era:", word)
+        print("¡Perdiste! La respuesta era:", original_word)
 
 
 if __name__ == '__main__':
