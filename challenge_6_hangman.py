@@ -8,7 +8,9 @@ By PmXa [11-2021]
 # Dependencies
 # ----------------------
 
+from drawings import *
 import random
+from os import system
 
 # ----------------------
 # Function definitions
@@ -23,9 +25,10 @@ def get_words():
 
 
 def print_info(life_count: int, user_guess: str):
+    print(drawings[6 - life_count])
     print("💖"*life_count)
-    print("".join(user_guess))
-    print("Enter a letter: ")
+    print(" ".join(user_guess))
+    print("Ingresa una letra: ")
 
 # ----------------------
 # Main function & entry point 
@@ -43,9 +46,10 @@ def run():
             answer[element].append(index)
 
     guess = ["_" for i in range(len(word) - 1)]
-    lives = 5
+    lives = 6
 
     while lives > 0:
+        _ = system("clear")
         print_info(lives, guess)
         try:
             letter = input()
@@ -60,11 +64,14 @@ def run():
             print(ve)
         
         if not ("_" in guess):
+            _ = system("clear")
             print("¡Ganaste!")
             break
         
     if lives == 0:
-        print("¡Perdiste! La resupuesta era:", word)
+        _ = system("clear")
+        print_info(lives, guess)
+        print("¡Perdiste! La respuesta era:", word)
 
 
 if __name__ == '__main__':
